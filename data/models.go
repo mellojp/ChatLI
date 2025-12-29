@@ -5,12 +5,12 @@ import (
 )
 
 type Message struct {
-	Id        string    `json:"id"`
-	Type      string    `json:"type"`
-	User      string    `json:"user"`
-	Content   string    `json:"message"`
-	Timestamp time.Time `json:"timestamp"`
-	RoomId    string    `json:"room_id"`
+	Id        string `json:"id"`
+	Type      string `json:"type"`
+	User      string `json:"user"`
+	Content   string `json:"message"`
+	Timestamp string `json:"timestamp"`
+	RoomId    string `json:"room_id"`
 }
 
 type Room struct {

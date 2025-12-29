@@ -4,6 +4,15 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+var ColorMap = map[int]string{
+	1: "#d42222ff",
+	2: "#1411c4ff",
+	3: "#0aaf05ff",
+	4: "#c6d317ff",
+	5: "#ca1ddaff",
+	6: "#50f5dfff",
+}
+
 var AppStyle = lipgloss.NewStyle().
 	Bold(true).
 	Foreground(lipgloss.Color("#FAFAFA")).
@@ -70,3 +79,12 @@ var ErrorStyle = lipgloss.NewStyle().
 	Foreground(lipgloss.Color("196")).
 	Bold(true).
 	PaddingTop(1)
+
+func HashColor(username string, colors map[int]string) string {
+	var hashCode int
+	for _, v := range username {
+		hashCode += int(v)
+	}
+	hashCode = (hashCode+37)%len(colors) + 1
+	return colors[hashCode]
+}

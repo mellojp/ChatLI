@@ -47,12 +47,17 @@ func RenderJoinRoom(m *Model) string {
 }
 
 func RenderChatView(m *Model) string {
-	s := "Sala: " + m.CurrentRoom + "\n\n"
+	m.TextArea.Placeholder = "Digite sua mensagem..."
+	s := ""
 	for _, val := range m.ChatsHistory[m.CurrentRoom] {
 		if val.Content != "" {
-			time := val.Timestamp.Format("15:04")
-			styledTime := TimeStyle.Render(time)
-			styledUser := SenderStyle.Render(val.User)
+			displayTime := val.Timestamp
+			if len(displayTime) >= 16 {
+				displayTime = displayTime[11:16]
+			}
+			styledTime := TimeStyle.Render(displayTime)
+			userColor := lipgloss.Color(HashColor(val.User, ColorMap))
+			styledUser := SenderStyle.Foreground(userColor).Render(val.User)
 			if m.Session.Username == val.User {
 				line := fmt.Sprintf("%s [%s]\n %s", styledUser, styledTime, val.Content)
 				s += lipgloss.NewStyle().Width(76).PaddingRight(3).Align(lipgloss.Right).Render(line) + "\n"
@@ -62,7 +67,7 @@ func RenderChatView(m *Model) string {
 			}
 		}
 	}
-	s += ErrorStyle.Render(m.ErrorMsg)
-	s += "\n" + InputStyle.Render(m.TextArea.View())
+	//s += ErrorStyle.Render(m.ErrorMsg)
+	//s += "\n" + InputStyle.Render(m.TextArea.View())
 	return s
 }

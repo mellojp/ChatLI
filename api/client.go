@@ -17,7 +17,7 @@ func CreateSession(name string) (*data.Session, error) {
 		"username": name,
 	}
 	body, _ := json.Marshal(msg)
-	resp, err := http.Post(url+"/sessions", "application/json", bytes.NewBuffer(body))
+	resp, err := http.Post(url+"/sessions/", "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func CreateSession(name string) (*data.Session, error) {
 }
 
 func CreateRoom(s data.Session) (*data.Room, error) {
-	reqUrl := url + "/rooms"
+	reqUrl := url + "/rooms/"
 	req, _ := http.NewRequest("POST", reqUrl, nil)
 	req.Header.Add("Authorization", "Bearer "+s.Id)
 	client := &http.Client{}
@@ -44,7 +44,9 @@ func CreateRoom(s data.Session) (*data.Room, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return nil, fmt.Errorf("erro ao entrar na sala: status %d", resp.StatusCode)
+	}
 	res := data.Room{
 		Id:           "",
 		CreatedAt:    time.Now(),
