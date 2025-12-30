@@ -74,6 +74,7 @@ func RenderChatView(m *Model) string {
 		styledUser := SenderStyle.Render(val.User)
 
 		if m.Session.Username == val.User {
+			styledUser := SenderStyle.Render("você")
 			line := fmt.Sprintf("%s <%s> [%s]", val.Content, styledUser, TimeStyle.Render(displayTime))
 			b.WriteString(lipgloss.NewStyle().Width(renderWidth).Align(lipgloss.Right).Render(line) + "\n")
 		} else {
